@@ -8,7 +8,7 @@ module.exports = {
 
             // get all the article and writer 
             connection.query('SELECT `list`.*, username FROM `list`, `users` WHERE `list`.`uid`=`users`.`id`', function (err, result) {
-                if (err) throw err;//
+                if (err) throw err; //
                 cb(result);
                 connection.release();
             })
@@ -32,16 +32,16 @@ module.exports = {
                 function (callback) {
                     connection.query('INSERT INTO `reply` SET ?', params, function (err, result) {
                         if (err) throw err;
-        
-                        callback(result);  
+
+                        callback(result);
                     });
                 },
                 function (callback) {
-                    var query = 'UPDATE `list` SET `replynum` = '+params[1]+' WHERE `id`= ?';
+                    var query = 'UPDATE `list` SET `replynum` = ' + params[1] + ' WHERE `id`= ?';
                     connection.query(query, [params[0].pid], function (err, result) {
                         if (err) throw err;
-        
-                        callback(result); 
+
+                        callback(result);
                     });
                 }
             ], function (err, results) {
@@ -59,7 +59,7 @@ module.exports = {
 
                 cb(result);
                 connection.release();
-               
+
             });
         });
     },
@@ -75,14 +75,25 @@ module.exports = {
             });
         });
     },
-    deleteReplyById: function (pid,uid, cb) {
+    deleteReplyById: function (pid, uid, cb) {
         pool.getConnection(function (err, connection) {
             if (err) throw err;
-
-            connection.query('delete FROM `list` WHERE `id`=? and `uid`=?', [pid,uid], function (err, result) {
-                if (err) throw err;
-
-                cb(result);
+            async.parallel([
+                function (callback) {
+                    connection.query('delete FROM `list` WHERE `id`=? and `uid`=?', [pid, uid], function (err, result) {
+                        if (err) throw err;
+        
+                        callback(result);
+                    });
+                },
+                function (callback) {
+                    connection.query('delete FROM `reply` WHERE `pid`=? and `uid`=?', [pid, uid], function (err, result) {
+                        if (err) throw err;
+                        callback(result);
+                    });
+                }
+            ], function (err, results) {
+                cb(results);
                 connection.release();
             });
         });
