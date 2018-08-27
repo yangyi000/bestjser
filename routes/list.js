@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var list_m = require('../models/list');
+var article_m = require('../models/article');
 var async = require("async");
 
 router.get('/addtopic', function (req, res) {
@@ -10,19 +10,19 @@ router.get('/addtopic', function (req, res) {
             md = req.query.md,
             html = req.query.html,
             uid = req.session.user.uid,
-            content=req.query.content,
+            content = req.query.content,
             createtime = parseInt(Date.now() / 1000);
 
         var params = {
             uid: uid,
             title: title,
             md: md,
-            html:html,
+            html: html,
             createtime: createtime,
-            content:content
+            content: content
         };
 
-        list_m.addTopic(params, function (result) {
+        article_m.addTopic(params, function (result) {
             // console.log(result);
             if (result.affectedRows) {
                 res.json({
@@ -47,9 +47,9 @@ router.get('/addtopic', function (req, res) {
         res.json({
             code: 1,
             msg: '您还未登录'
-        })
+        });
     }
-})
+});
 
 
 router.get('/:pid.html', function (req, res) {
@@ -57,12 +57,12 @@ router.get('/:pid.html', function (req, res) {
 
     async.parallel([
         function (callback) {
-            list_m.getListById(pid, function (result) {
+            article_m.getListById(pid, function (result) {
                 callback(null, result[0]);
             })
         },
         function (callback) {
-            list_m.getReplyById(pid, function (result) {
+            article_m.getReplyById(pid, function (result) {
                 callback(null, result);
             })
         },
@@ -78,6 +78,7 @@ router.get('/:pid.html', function (req, res) {
 
 });
 router.post('/addReply', function (req, res) {
+    var pid = req.query.id;
     if (req.session.user) {
         console.log(req.session.user)
         var content = req.body.content,
@@ -89,34 +90,32 @@ router.post('/addReply', function (req, res) {
             createtime: createtime,
             name: req.session.user.username
         };
-        list_m.addReply(params, function (result) {
-            if (result.affectedRows) {
-                console.log('评论成功');
-                res.redirect('article.html?id=' + req.query.id);
+        var replynum ;
+        async.parallel([
+            function (callback) {
+                article_m.getListById(pid, function (result) {
+                    replynum = result[0].replynum + 1 || 1;
+                    callback(null, params,replynum);
+                });
             }
-        })
+        ], function (err, results) {
+            article_m.addReply(results[0], function (result) {
+                if (result) {
+                    console.log('评论成功');
+                    res.redirect('/list/article.html?id=' + req.query.id);
+                }
+            });
+        });
+
     } else {
-        res.json({
-            code: 1,
-            msg: '您还未登录'
-        })
+        res.redirect('/user');
     }
 });
 
 router.post('/delete', function (req, res) {
     if (req.session.user) {
         console.log(req.session.user)
-        var content = req.body.content,
-            createtime = parseInt(Date.now() / 1000);
-        var params = {
-            pid: req.query.id,
-        };
-        list_m.addReply(params, function (result) {
-            if (result.affectedRows) {
-                console.log('评论成功');
-                res.redirect(req.query.id + '.html');
-            }
-        })
+
     } else {
         res.json({
             code: 1,

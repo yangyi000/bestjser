@@ -30,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'key', // 建议使用 128 个字符的随机字符串
   cookie: {
-    maxAge: 60 * 60 * 1000
+    maxAge: 60 * 60 * 1000 * 6
   }, // 设置时间
   resave: false,
   saveUninitialized: true
@@ -57,7 +57,7 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 app.use(function (req, res, next) {
-  // 如果session中存在，则说明已经登录
+  // 保持登录状态
   if (req.session.user) {
     res.locals.user = {
       uid: req.session.user.uid,

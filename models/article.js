@@ -1,45 +1,53 @@
 var pool = require('./db');
-
+var async = require("async");
 module.exports = {
-    // 获取首页的主题
+    // get all the article
     getIndexList: function (cb) {
         pool.getConnection(function (err, connection) {
             if (err) throw err;
 
-            // 连表查询，获取到作者的用户名
+            // get all the article and writer 
             connection.query('SELECT `list`.*, username FROM `list`, `users` WHERE `list`.`uid`=`users`.`id`', function (err, result) {
-                if (err) throw err;
-
+                if (err) throw err;//
                 cb(result);
                 connection.release();
-                // 接下来connection已经无法使用，它已经被返回到连接池中 
             })
         });
     },
-    addTopic: function (params, cb) {
+    addArticle: function (params, cb) {
         pool.getConnection(function (err, connection) {
             if (err) throw err;
 
             connection.query('INSERT INTO `list` SET ?', params, function (err, result) {
                 if (err) throw err;
-
                 cb(result);
                 connection.release();
-                // 接下来connection已经无法使用，它已经被返回到连接池中 
             })
         });
     },
     addReply: function (params, cb) {
         pool.getConnection(function (err, connection) {
             if (err) throw err;
-
-            connection.query('INSERT INTO `reply` SET ?', params, function (err, result) {
-                if (err) throw err;
-
-                cb(result);
+            async.parallel([
+                function (callback) {
+                    connection.query('INSERT INTO `reply` SET ?', params, function (err, result) {
+                        if (err) throw err;
+        
+                        callback(result);  
+                    });
+                },
+                function (callback) {
+                    var query = 'UPDATE `list` SET `replynum` = '+params[1]+' WHERE `id`= ?';
+                    connection.query(query, [params[0].pid], function (err, result) {
+                        if (err) throw err;
+        
+                        callback(result); 
+                    });
+                }
+            ], function (err, results) {
+                cb(results);
                 connection.release();
-                // 接下来connection已经无法使用，它已经被返回到连接池中 
-            })
+            });
         });
     },
     getListById: function (id, cb) {
@@ -51,8 +59,8 @@ module.exports = {
 
                 cb(result);
                 connection.release();
-                // 接下来connection已经无法使用，它已经被返回到连接池中 
-            })
+               
+            });
         });
     },
     getReplyById: function (pid, cb) {
@@ -64,8 +72,7 @@ module.exports = {
 
                 cb(result);
                 connection.release();
-                // 接下来connection已经无法使用，它已经被返回到连接池中 
-            })
+            });
         });
     },
     deleteReplyById: function (pid, cb) {
@@ -77,8 +84,7 @@ module.exports = {
 
                 cb(result);
                 connection.release();
-                // 接下来connection已经无法使用，它已经被返回到连接池中 
-            })
+            });
         });
     }
 }

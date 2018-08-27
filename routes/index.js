@@ -1,12 +1,12 @@
 var express = require('express');
 var router = express.Router();
-var list_m = require('../models/list');
+var article_m = require('../models/article');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
   var id = req.session.user ? req.session.user.uid : 0;
   var username = req.session.user ? req.session.user.username : '';
-  list_m.getIndexList(function (result) {
+  article_m.getIndexList(function (result) {
     res.render('index', {
       data: result,
       userId: id,
