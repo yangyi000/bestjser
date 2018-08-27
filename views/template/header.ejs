@@ -1,0 +1,23 @@
+
+<header>
+    <a href="/" rel="external nofollow" title="jser">
+        <img src="/images/jser.jpg" alt="jserIcon">
+    </a>
+    <% if(userId){ %>
+    <div class="userinfo">
+        <a href="/article/edit" rel="external nofollow" title="写博客">
+           写博客
+        </a>
+        <a href="/home?user=<%=username%>" rel="external nofollow" title="登录">
+            <%=username%>
+        </a>
+    </div>
+    <% }else{ %>
+    <div class="userinfo">
+        <a href="/user/login" rel="external nofollow" title="登录">
+            登录
+        </a>
+    </div>
+    <% } %>
+
+</header>

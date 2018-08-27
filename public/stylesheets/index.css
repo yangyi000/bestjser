@@ -1,0 +1,25 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+header{
+    height: 50px;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    align-content: center;
+    padding: 0 50px;
+    background: #20232a;
+    color: #fff;
+}
+header .userinfo{
+    line-height: 50px;
+}
+header .userinfo a{
+    color: #fff;
+    text-decoration: none;
+}
+.body{
+    max-width: 1200px;
+    margin: 50px auto;
+}

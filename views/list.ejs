@@ -1,0 +1,50 @@
+<p>
+    <a href="/" rel="external nofollow" rel="external nofollow" rel="external nofollow">返回到首页</a>
+</p>
+<h1>详情</h1>
+<p>标题：
+    <%=data[0].title %>
+</p>
+<div>
+    <%- data[0].html %>
+</div>
+<div class="reply">
+    <h2>评论</h2>
+    <div class="reply_con">
+        <table>
+            <% for(var i=0, len=data[1].length; i<len; i++) { %>
+                <tr>
+                    <td>
+                        <%=(i+1) %> 楼
+                    </td>
+                    <td>
+                        <%=data[1][i].name %>
+                    </td>
+                    <td>
+                        <%=data[1][i].content %>
+                    </td>
+
+                    <td>
+                        <%=data[1][i].createtime %>
+                    </td>
+                    <% if(data[1][i].uid===userId){ %>
+                    <td>
+                        删除
+                    </td>
+                    <% } %>
+                </tr>
+                <% } %>
+        </table>
+    </div>
+    <div class="reply_action">
+        <% { %>
+            <form action="/list/addReply?id=<%=data[0].id %>" method="post">
+                <textarea name="content" cols="100" rows="10" required="required"></textarea>
+                <p>
+                    <input type="submit" name="submit" value="评论" />
+                </p>
+                
+            </form>
+        <% } %>
+    </div>
+</div>

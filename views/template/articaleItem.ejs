@@ -1,0 +1,37 @@
+ <link rel='stylesheet' href='/stylesheets/articleItems.css' />
+ <ul>
+    <% res.forEach(function(data){ %>
+    <li class = 'article'>
+        <div class='title'>
+            <a href="/list/article.html?id=<%=data.id %>" rel="external nofollow" title="<%=data.title %>">
+                <%=data.title %>
+            </a>
+            <% if(data.uid===userId){ %>
+            <div class="actions">
+                <a href="/article/edit.html?id=<%=data.id %>" rel="external nofollow" title="编辑">
+                    编辑
+                </a>
+                <a href="/article/delete.html?id=<%=data.id %>" rel="external nofollow" title="删除">
+                    删除
+                </a>
+            </div>
+             <% } %>
+        </div>
+        
+        <div class='content'>
+            <%=data.content %>
+        </div>
+        <p class='footer'>
+        <% if(data.uid!==userId){ %>
+        <a href="//home?user=<%=username%>"><%=data.username %></a>
+        <% } %>
+        <span>
+        发表于<%= new Date(data.createtime*1000).toLocaleString()%>
+        </span>
+        <a href="/list/article.html?id=<%=data.id %>" rel="external nofollow" title="<%=data.title %>">
+            评论(<%=data.replyNum||0 %>)
+        </a>
+        </p>
+    </li>
+    <% }) %>
+</ul>

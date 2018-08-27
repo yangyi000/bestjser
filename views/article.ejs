@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/stylesheets/editormd.css" />   
+        <link rel='stylesheet' href='/stylesheets/index.css' />
+        <style>            
+            #layout{
+                max-width:1200px;
+                margin:0 auto;
+            }
+            #content,#title{
+                width:100%;
+                margin:5px 0;
+            }
+            h4{
+                padding:5px 0;
+            }
+        </style>     
+    </head>
+    <body>
+        <%- include('template/header.ejs') %> 
+        
+        <div id="layout">
+            <h4>标题</h4>
+            <input id='title'/>
+            <h4>主题</h4>
+            <textarea id='content'></textarea>
+            <div id="jser-editormd"></div>
+            <button id='Publish'>提交</button>
+            <button id='download'>下载</button>
+            <select>
+                <option>Es6</option>
+                <option>Angular</option>
+                <option>React</option>
+                <option>Vue</option>
+                <option>NodeJs</option>
+                <option>Webpack</option>
+                <option>Html5</option>
+                <option>Css3</option>
+
+            </select>
+        </div>
+        
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/editormd.js"></script>   
+        <script type="text/javascript">
+            var jserEditor;
+            $(function() {
+                jserEditor = editormd("jser-editormd", {
+                    width: "100%",
+                    height: 540,
+                    
+                    path : '/lib/',
+                    theme : "default",
+                    previewTheme : "default",
+                    editorTheme : "default",
+                    markdown : '',
+                    codeFold : true,
+                    //syncScrolling : false,
+                    saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
+                    searchReplace : true,
+                    //watch : false,                // 关闭实时预览
+                    htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启    
+                    //toolbar  : false,             //关闭工具栏
+                    //previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
+                    emoji : true,
+                        toolbarIcons : function() {
+                        return editormd.toolbarModes['full']; // full, simple, mini
+                        // Using "||" set icons align right.
+                        // return ["undo", "redo", "|", "bold", "hr", "|", "preview", "watch", "|", "fullscreen", "info", "testIcon", "testIcon2", "file", "faicon", "||", "watch", "fullscreen", "preview", "testIcon"]
+                    },
+                    toolbarIconsClass : {
+                        testIcon : "fa-gears"  // 指定一个FontAawsome的图标类
+                    },
+                    taskList : true,
+                    tocm            : true,         // Using [TOCM]
+                    tex : true,                   // 开启科学公式TeX语言支持，默认关闭
+                    flowChart : true,             // 开启流程图支持，默认关闭
+                    sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
+                    //dialogLockScreen : false,   // 设置弹出层对话框不锁屏，全局通用，默认为true
+                    //dialogShowMask : false,     // 设置弹出层对话框显示透明遮罩层，全局通用，默认为true
+                    //dialogDraggable : false,    // 设置弹出层对话框不可拖动，全局通用，默认为true
+                    //dialogMaskOpacity : 0.4,    // 设置透明遮罩层的透明度，全局通用，默认值为0.1
+                    //dialogMaskBgColor : "#000", // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
+                    imageUpload : true,
+                    imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                    imageUploadURL : "./uploadImage",
+                    onload : function() {
+                        console.log('onload', this);
+                        //this.fullscreen();
+                        //this.unwatch();
+                        //this.watch().fullscreen();
+
+                        //this.setMarkdown("#PHP");
+                        //this.width("100%");
+                        //this.height(480);
+                        //this.resize("100%", 640);
+                    }
+                });
+                $("#Publish").bind('click', function() {
+                    var html = jserEditor.getHTML();
+                    var md = jserEditor.getMarkdown();
+                    var title = $('#title').val();
+                    var content = $('#content').val();
+                     $.ajax({
+                        url: '/list/addtopic', // 提交接口
+                        data: {
+                            title: title,
+                            md: md,
+                            html:html,
+                            content:content
+                        },
+                        dataType: 'json',
+                        type: 'get'
+                    })
+                });
+            });
+        </script>
+    </body>
+</html>

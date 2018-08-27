@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title><%=username%>的主页</title>
+    <link rel='stylesheet' href='/stylesheets/index.css' />
+</head>
+    <body>
+        <%- include('template/header.ejs') %> 
+        <div class="body">
+            <%- include('template/articaleItem.ejs', {res: data}) %> 
+        </div>
+    </body>
+</html>
