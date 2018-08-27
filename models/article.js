@@ -75,11 +75,11 @@ module.exports = {
             });
         });
     },
-    deleteReplyById: function (pid, cb) {
+    deleteReplyById: function (pid,uid, cb) {
         pool.getConnection(function (err, connection) {
             if (err) throw err;
 
-            connection.query('delete * FROM `reply` WHERE `pid`=?', [pid], function (err, result) {
+            connection.query('delete FROM `list` WHERE `id`=? and `uid`=?', [pid,uid], function (err, result) {
                 if (err) throw err;
 
                 cb(result);

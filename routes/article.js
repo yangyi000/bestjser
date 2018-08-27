@@ -72,7 +72,7 @@ router.post('/addArticle', function (req, res) {
                 res.json({
                     code: 2,
                     msg: '添加失败，请重新尝试'
-                })
+                });
             }
         });
 

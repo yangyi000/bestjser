@@ -1,5 +1,22 @@
  <link rel='stylesheet' href='/stylesheets/articleItems.css' />
+ <script src="/js/jquery.min.js"></script>
+ <script>
+function ondelete(id){
+    $.ajax({
+        url: '/list/delete',
+        data: {
+            id: id
+        },
+        dataType: 'json',
+        type: 'post',
+        success: function(res){
+            window.location.href = window.location.origin+res.data.url;
+        }
+    })
+}
+ </script>
  <ul>
+    
     <% res.forEach(function(data){ %>
     <li class = 'article'>
         <div class='title'>
@@ -11,7 +28,7 @@
                 <a href="/article/edit?id=<%=data.id %>" rel="external nofollow" title="编辑">
                     编辑
                 </a>
-                <a href="/article/delete.html?id=<%=data.id %>" rel="external nofollow" title="删除">
+                <a onclick="ondelete(<%=data.id%>)" rel="external nofollow" title="删除">
                     删除
                 </a>
             </div>
