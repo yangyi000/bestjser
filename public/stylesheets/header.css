@@ -1,0 +1,14 @@
+.userinfo{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+a{
+    margin: 0 15px;
+}
+#logout{
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    margin: 15px;
+}

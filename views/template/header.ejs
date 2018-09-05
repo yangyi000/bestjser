@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" href="/stylesheets/header.css">
 <header>
     <a href="/" rel="external nofollow" title="jser">
         <img src="/images/jser.jpg" alt="jserIcon">
@@ -7,17 +7,36 @@
     <div class="userinfo">
         <a href="/article/edit" rel="external nofollow" title="写博客">
            写博客
-        </a>
-        <a href="/home?user=<%=username%>" rel="external nofollow" title="登录">
+        </a>|
+        <a href="/home?user=<%=username%>" rel="external nofollow" title="<%=username%>">
             <%=username%>
-        </a>
+        </a>|
+        <img id="logout" src="/images/log-out.svg" alt="退出登录" title="退出登录">
     </div>
     <% }else{ %>
     <div class="userinfo">
         <a href="/user/login" rel="external nofollow" title="登录">
             登录
+        </a>|
+        <a href="/user/reg" rel="external nofollow" title="登录">
+            注册
         </a>
     </div>
     <% } %>
 
 </header>
+<script src="/js/jquery.min.js"></script>
+<script>
+    $(function(){
+        $('#logout').bind('click', function() {
+            $.ajax({
+                url: '/user/logout',
+                dataType: 'json',
+                type: 'post',
+                success: function(res){
+                    window.location.href = window.location.origin;
+                }
+            })
+        })
+    })
+</script>
