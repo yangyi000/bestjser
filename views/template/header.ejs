@@ -10,8 +10,9 @@
         </a>|
         <a href="/home?user=<%=username%>" rel="external nofollow" title="<%=username%>">
             <%=username%>
-        </a>|
-        <img id="logout" src="/images/log-out.svg" alt="退出登录" title="退出登录">
+        </a>
+        <!-- |
+        <img id="logout" src="/images/log-out.svg" alt="退出登录" title="退出登录"> -->
     </div>
     <% }else{ %>
     <div class="userinfo">
@@ -26,7 +27,7 @@
 
 </header>
 <script src="/js/jquery.min.js"></script>
-<script>
+<!-- <script>
     $(function(){
         $('#logout').bind('click', function() {
             $.ajax({
@@ -40,4 +41,4 @@
             })
         })
     })
-</script>
+</script> -->
