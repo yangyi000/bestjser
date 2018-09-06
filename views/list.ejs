@@ -1,3 +1,11 @@
+<link rel="stylesheet" href="/stylesheets/editormd.css" />   
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+</style>
 <p>
     <a href="/" rel="external nofollow" rel="external nofollow" rel="external nofollow">返回到首页</a>
 </p>
@@ -5,9 +13,7 @@
 <p>标题：
     <%=data[0].title %>
 </p>
-<div>
-    <%- data[0].html %>
-</div>
+<div class='markdown-body editormd-preview-container'><%-data[0].html %></div>
 <div class="reply">
     <h2>评论</h2>
     <div class="reply_con">

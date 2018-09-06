@@ -99,7 +99,7 @@
                     }
                 });
                 $("#Publish").bind('click', function() {
-                    var html = jserEditor.getHTML();
+                    var html = jserEditor.getPreviewedHTML();
                     var md = jserEditor.getMarkdown();
                     var title = $('#title').val();
                     var content = $('#content').val();
@@ -117,6 +117,20 @@
                             window.location.href = window.location.origin+res.data.url;
                         }
                     })
+                });
+                $("#download").bind('click', function() {
+                    var html = jserEditor.getPreviewedHTML();
+                    var eleLink = document.createElement('a');
+                    eleLink.download = 'article.html';
+                    eleLink.style.display = 'none';
+                    // 字符内容转变成blob地址
+                    var blob = new Blob([html]);
+                    eleLink.href = URL.createObjectURL(blob);
+                    // 触发点击
+                    document.body.appendChild(eleLink);
+                    eleLink.click();
+                    // 然后移除
+                    document.body.removeChild(eleLink);
                 });
             });
         </script>

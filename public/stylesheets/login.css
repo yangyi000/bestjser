@@ -1,0 +1,42 @@
+
+body,html{
+    margin: 0;
+    padding: 0;
+}
+a{
+    text-decoration: none;
+    color:#00B7FF;
+    /* font-size: 14px; */
+}
+.tip {
+    color: #f00;
+}
+.container{
+    display:inline-flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    padding: 15px 30px;
+    position: absolute;
+    right: 25%;
+    top: 25%;
+    border:1px solid #444;
+    box-shadow:  0 0 5px #444;
+}
+.login_btn{
+    width: 100%;
+    padding: 7px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+.password,.account{
+    height: 24px;
+    padding-left: 5px;
+    border: 1px solid #999;
+}
+.back_index{
+    width: 100%;
+    text-align: left;
+}

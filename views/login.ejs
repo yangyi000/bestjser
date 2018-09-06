@@ -3,20 +3,14 @@
 
 <head>
     <title>登录</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <style type="text/css">
-        .tip {
-            color: #f00;
-        }
-    </style>
+    <link rel='stylesheet' href='/stylesheets/login.css' />
 </head>
 
 <body>
     <div class="container">
-        <p>
+        <p class='back_index'>
             <a href="/" rel="external nofollow" rel="external nofollow" rel="external nofollow">回到首页</a>
         </p>
-        <h1>登录</h1>
         <form action="/user/login/" method="post">
             <% if(errmsg){ %>
                 <p class="tip">*
@@ -24,13 +18,13 @@
                 </p>
                 <% } %>
                     <p>用户名：
-                        <input type="text" name="username" required="required">
+                        <input class="account" type="text" name="username" required="required">
                     </p>
                     <p>密 码：
-                        <input type="password" name="password" required="required">
+                        <input class="password" type="password" name="password" required="required">
                     </p>
                     <p>
-                        <input type="submit" name="submit" value="submit">
+                        <input class="login_btn" type="submit" name="submit" value="登录">
                     </p>
         </form>
         <p>还没帐号？
