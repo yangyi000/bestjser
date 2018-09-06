@@ -1,0 +1,30 @@
+#category{
+    left: 30px;
+    top: 100px;
+    background: #fff;
+    width: 80%;
+    height: 50px;
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: center;
+}
+#category>span{
+    margin-left:15px; 
+}
+#category ul{
+    display: flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: flex-start;
+}
+#category ul li{
+    cursor: pointer;
+    color: #666;
+    margin: 0 15px;
+}
+#category ul li:hover{
+    color: aqua;
+}
