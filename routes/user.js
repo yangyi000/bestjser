@@ -85,9 +85,10 @@ router.post('/login', function (req, res, next) {
       });
     }
   });
-
-
-
 });
-
+router.post('/logout', function (req, res, next) {
+  req.session.user = {}
+  console.log('退出成功');
+  return res.json({});
+})
 module.exports = router;
