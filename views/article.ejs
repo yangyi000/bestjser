@@ -20,14 +20,21 @@
     </head>
     <body>
         <%- include('template/header.ejs') %> 
-        
-        <div id="layout">
+        <div id="layout" >
             <h4>标题</h4>
-            <input id='title'/>
+            <input id='title' value="<%=data?data[0].title:'' %>"/>
             <h4>主题</h4>
-            <textarea id='content'></textarea>
-            <div id="jser-editormd"></div>
+            <textarea id='content'><%=data?data[0].content:'' %></textarea>
+            <div id="jser-editormd">
+                <% if(data){ %>
+                    <textarea class="editormd-markdown-textarea" name="test-editormd-markdown-doc" style="display: none;"><%-data[0].MD %> </textarea>
+                <% } %>
+            </div>
+            <% if(data){ %>
+            <button id='update'>更新</button>
+            <% }else{%>
             <button id='Publish'>提交</button>
+            <% }%>
             <button id='download'>下载</button>
             <select>
                 <option>Es6</option>
@@ -115,6 +122,26 @@
                         type: 'post',
                         success: function(res){
                             window.location.href = window.location.origin+res.data.url;
+                        }
+                    })
+                });
+                $("#update").bind('click', function() {
+                    var html = jserEditor.getPreviewedHTML();
+                    var md = jserEditor.getMarkdown();
+                    var title = $('#title').val();
+                    var content = $('#content').val();
+                     $.ajax({
+                        url: '/article/update', // 提交接口
+                        data: {
+                            title: title,
+                            md: md,
+                            html:html,
+                            content:content
+                        },
+                        dataType: 'json',
+                        type: 'post',
+                        success: function(res){
+                            window.location.href = window.location.origin+'/list/article.html?id='+res.id;
                         }
                     })
                 });

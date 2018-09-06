@@ -2,37 +2,33 @@ var express = require('express');
 var router = express.Router();
 var article_m = require('../models/article');
 var async = require("async");
-
+var editId = null;
 router.get('/edit', function (req, res) {
+    
     if (req.session.user) {
-        if (req.query.id) {
-            var id = req.query.id;
-            async.parallel([
-                function (callback) {
-                    article_m.getListById(id, function (result) {
-                        callback(null, result[0]);
-                    })
-                },
-                function (callback) {
-                    article_m.getReplyById(id, function (result) {
-                        callback(null, result);
-                    })
-                },
-            ], function (err, results) {
-                // console.log( results );
+        var id = req.query.id; 
+        if(id){ // 有ID则为编辑
+            editId = id;
+            article_m.getListById(id, function (result) {
                 // res.json(results);
-                var id = req.session.user ? req.session.user.uid : 0;
-                res.render('article', {
-                    data: results[0],
-                    userId: id,
-                    username: req.session.user.username,
-                });
+                var uid = req.session.user ? req.session.user.uid : 0;
+                if (uid === result[0].uid) {// 验证该文章作者是否与当前登录用户匹配。Y:正常编辑；N:跳转新建文章
+                    res.render('article', {
+                        data: result,
+                        userId: id,
+                        username: req.session.user.username,
+                    });
+                }else{
+                    res.redirect('edit');
+                }
+            });  
+        }else{ // 没有id为新建
+            res.render('article', {
+                data: '',
+                username: req.session.user.username,
+                userId: req.session.user.uid
             });
         }
-        res.render('article', {
-            username: req.session.user.username,
-            userId: req.session.user.uid
-        });
     } else {
         res.redirect('/user');
     }
@@ -108,6 +104,39 @@ router.get('/:pid.html', function (req, res) {
         });
     })
 
+});
+router.post('/update', function (req, res) {
+    if (req.session.user) {
+        var title = req.body.title,
+            md = req.body.md,
+            html = req.body.html,
+            uid = req.session.user.uid,
+            content = req.body.content,
+            createtime = parseInt(Date.now() / 1000);
+        var params = {
+            uid: uid,
+            title: title,
+            md: md,
+            html: html,
+            createtime: createtime,
+            content: content
+        };
+        if (editId) {
+            var id = editId; 
+            article_m.updateListById(editId,params, function (result) {
+                // res.json(results);
+                editId = null;// 重置文章编辑ID
+                res.json({
+                    data: result,
+                    id:id,
+                    userId: req.session.user.uid,
+                    username: req.session.user.username,
+                });
+            });  
+        }
+    } else {
+        res.redirect('/user');
+    }
 });
 
 module.exports = router;

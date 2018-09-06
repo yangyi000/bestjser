@@ -63,6 +63,18 @@ module.exports = {
             });
         });
     },
+    updateListById: function (id,params, cb) {
+        pool.getConnection(function (err, connection) {
+            if (err) throw err;
+            connection.query('UPDATE `list` SET ? WHERE `id`=?', [params,id] , function (err, result) {
+                if (err) throw err;
+
+                cb(result);
+                connection.release();
+
+            });
+        });
+    },
     getReplyById: function (pid, cb) {
         pool.getConnection(function (err, connection) {
             if (err) throw err;
